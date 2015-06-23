@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form prependId="false">
+
+	<p:menubar>
+
+		<p:submenu label="Usuários" icon="ui-icon-pencil">
+			<p:menuitem value="Gerenciar Usuários" 
+				url="/paginas/admin/gerenciaUsuarios.xhtml"
+				icon="ui-icon-arrowreturnthick-1-w" />
+		</p:submenu>
+
+		<p:submenu label="Departamentos" icon="ui-icon-pencil">
+			<p:menuitem value="Gerenciar Departamentos" 
+				url="/paginas/usuario/gerenciaDepartamentos.xhtml"
+				icon="ui-icon-arrowreturnthick-1-w" />
+			<p:menuitem value="Gerenciar Alocações" 
+				url="/paginas/usuario/gerenciaAlocacoes.xhtml"
+				icon="ui-icon-arrowreturnthick-1-w" />
+		</p:submenu>
+
+		<p:submenu label="Telas" icon="ui-icon-pencil">
+			<p:menuitem value="Gerenciar Telas" 
+				url="/paginas/admin/gerenciaTelas.xhtml"
+				icon="ui-icon-arrowreturnthick-1-w" />
+			<p:menuitem value="Gerenciar Permissão Telas" 
+				url="/paginas/admin/gerenciaPermissaoTelas.xhtml"
+				icon="ui-icon-arrowreturnthick-1-w" />
+		</p:submenu>
+
+		<p:menuitem value="Sair" url="http://www.primefaces.org"
+			icon="ui-icon-close" />
+
+	</p:menubar>
+</h:form>
+
+</html>

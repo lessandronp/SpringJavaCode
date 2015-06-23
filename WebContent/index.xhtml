@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/resources/templates/template.xhtml"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="header">
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form prependId="false">
+			
+			<p:messages id="messages" />
+			
+			<p:panel header="Login">
+				<p:panelGrid columns="2" styleClass="noBorder">
+					<p:outputLabel for="j_username" value="Nome Usuário:" />
+					<p:inputText id="j_username" />
+					<p:outputLabel for="j_password" value="Senha:" />
+					<p:password id="j_password" />
+					<p:commandButton value="Enviar" icon="ui-icon-star"
+						action="#{indexBean.authenticate}" ajax="false">
+					</p:commandButton>
+				</p:panelGrid>
+			</p:panel>
+			
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="footer">
+	</ui:define>
+
+</ui:composition>

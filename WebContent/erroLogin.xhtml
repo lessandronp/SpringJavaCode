@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/resources/templates/template.xhtml"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="header">
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<script type="text/javascript">
+			$(window).load(function() {
+				PF('dlgErro').show();
+			});
+		</script>
+
+		<h:form prependId="false">
+			<p:dialog header="Erro" widgetVar="dlgErro" modal="true" height="100">
+    			<p:messages />
+			</p:dialog> 			
+			
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="footer">
+	</ui:define>
+
+</ui:composition>

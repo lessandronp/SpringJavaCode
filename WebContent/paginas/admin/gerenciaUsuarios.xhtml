@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/resources/templates/template.xhtml"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="header">
+		<ui:include src="/paginas/cabecalho.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<f:viewAction phase="APPLY_REQUEST_VALUES"
+				action="#{gerenciaUsuarioBean.init()}" />
+		</f:metadata>
+
+		<h:form prependId="false">
+			
+			<p:panel header="Usuários">
+			
+				<p:dataTable var="usuario" value="#{gerenciaUsuarioBean.usuarios}">
+					<p:column headerText="Nome">
+				        <h:outputText value="#{usuario.nome}" />
+				    </p:column>				
+					<p:column headerText="Login">
+				        <h:outputText value="#{usuario.username}" />
+				    </p:column>				
+					<p:column headerText="Departamento">
+				        <h:outputText value="#{usuario.departamento.nome}" />
+				    </p:column>
+			        <p:column>
+			             <p:commandButton title="View">
+			            </p:commandButton>
+			        </p:column>				    				
+   				</p:dataTable>
+			
+			</p:panel>
+			
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="footer">
+	</ui:define>
+
+</ui:composition>

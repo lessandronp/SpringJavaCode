@@ -1,0 +1,13 @@
+.noBorder tr {
+	border: none !important; 
+}
+
+.noBorder td {
+	 border-style: none !important;
+}
+
+.ui-menu li ul {
+	height: auto !important;
+	overflow: inherit !important;
+	width: 300px !important;
+}
