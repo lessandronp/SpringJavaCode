@@ -17,7 +17,10 @@
 		</script>
 
 		<h:form prependId="false">
-			<p:dialog header="Erro" widgetVar="dlgErro" modal="true" height="100">
+	
+			<ui:include src="#{request.contextPath}/resources/includes/login.xhtml" />
+
+			<p:dialog header="Erro" widgetVar="dlgErro" modal="true" height="200" width="300">
     			<p:messages />
 			</p:dialog> 			
 			

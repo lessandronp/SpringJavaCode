@@ -1,4 +1,4 @@
-package com.solucaocriativa.spring;
+package com.solucaocriativa.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 
 import com.solucaocriativa.filter.CustomAuthenticationProvider;
 import com.solucaocriativa.filter.SecurityLoginSuccessHandler;
@@ -66,9 +65,9 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
 	web.ignoring().antMatchers("/resources/**");	
     }
     
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
+//    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+//        configurer.enable();
+//    }
     
     private String preparaRegra(String grantedAuthority) {
 	return Constants.ROLE_PREFFIX.concat(grantedAuthority.replaceAll(Constants.REGEX_ASC, "").toUpperCase());

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form prependId="false">
+		
+		<p:messages id="messages" />
+		
+		<p:panel header="Login">
+			<p:panelGrid columns="2" styleClass="noBorder">
+				<p:outputLabel for="j_username" value="Nome Usuário:" />
+				<p:inputText id="j_username" />
+				<p:outputLabel for="j_password" value="Senha:" />
+				<p:password id="j_password" />
+				<p:commandButton value="Enviar" icon="ui-icon-star"
+					action="#{indexBean.authenticate}" ajax="false">
+				</p:commandButton>
+			</p:panelGrid>
+		</p:panel>
+		
+	</h:form>
+		
+</html>

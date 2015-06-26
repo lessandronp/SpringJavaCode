@@ -1,4 +1,4 @@
-package com.solucaocriativa.servlet;
+package com.solucaocriativa.config;
 
 import java.util.EnumSet;
 
@@ -18,15 +18,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.util.Log4jConfigListener;
 
-import com.solucaocriativa.spring.SpringConfig;
-
 public class WebAppInitializer implements WebApplicationInitializer {
     
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
 	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(SpringConfig.class);
+//        ctx.register(SpringConfig.class);
         ctx.setServletContext(servletContext);
         
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
@@ -59,6 +57,15 @@ public class WebAppInitializer implements WebApplicationInitializer {
         servletContext.setInitParameter("org.ajax4jsf.handleViewExpiredOnClient", "true");
         servletContext.setInitParameter("primefaces.THEME", "start");
         servletContext.setInitParameter("org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL", "true");
+        servletContext.setInitParameter("primefaces.CLIENT_SIDE_VALIDATION", "true");
+        servletContext.setInitParameter("primefaces.UPLOADER", "commons");
+        servletContext.setInitParameter("primefaces.PRIVATE_CAPTCHA_KEY", 
+        	"6LfD3-QSAAAAADtDVq4I2weALbuSR1-KehgvAMYW");
+        servletContext.setInitParameter("primefaces.PUBLIC_CAPTCHA_KEY", 
+        	"6LfD3-QSAAAAAKq31okWYrsN9yDpU97rzJoAq5Wm");
+        servletContext.setInitParameter("contextClass", 
+        	"org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+        servletContext.setInitParameter("contextConfigLocation", "com.solucaocriativa.config");
         
         ServletRegistration.Dynamic facesServlet = servletContext.addServlet("Faces Servlet", FacesServlet.class);
         facesServlet.setLoadOnStartup(1);
