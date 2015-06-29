@@ -16,28 +16,107 @@
 				action="#{gerenciaUsuarioBean.init()}" />
 		</f:metadata>
 
-		<h:form prependId="false">
-			
-			<p:panel header="Usuários">
-			
-				<p:dataTable var="usuario" value="#{gerenciaUsuarioBean.usuarios}">
-					<p:column headerText="Nome">
-				        <h:outputText value="#{usuario.nome}" />
-				    </p:column>				
-					<p:column headerText="Login">
-				        <h:outputText value="#{usuario.username}" />
-				    </p:column>				
-					<p:column headerText="Departamento">
-				        <h:outputText value="#{usuario.departamento.nome}" />
-				    </p:column>
-			        <p:column>
-			             <p:commandButton title="View">
-			            </p:commandButton>
-			        </p:column>				    				
-   				</p:dataTable>
-			
+		<h:form id="formUsuarios" prependId="false">
+
+			<p:panel header="#{msgs['label.users']}">
+
+				<p:dataTable id="tabelaUsuarios" var="usuario"
+					value="#{gerenciaUsuarioBean.usuarios}">
+					<p:column headerText="#{msgs['label.nome']}" style="width: 30%">
+						<h:outputText value="#{usuario.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.username']}" style="width: 20%">
+						<h:outputText value="#{usuario.username}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.department']}"
+						style="width: 20%">
+						<h:outputText value="#{usuario.departamento.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
+						<p:commandButton value="#{msgs['label.view']}"
+							action="#{gerenciaUsuarioBean.visualizar(usuario)}"
+							update=":formUsuarios:panelUsuario" />
+						<p:commandButton value="#{msgs['label.edit']}"
+							action="#{gerenciaUsuarioBean.editar(usuario)}"
+							update=":formUsuarios:panelUsuario" />
+						<p:commandButton value="#{msgs['label.delete']}"
+							action="#{gerenciaUsuarioBean.remover(usuario)}"
+							update="tabelaUsuarios" />
+					</p:column>
+				</p:dataTable>
+
 			</p:panel>
 			
+			<p:spacer height="10" width="1" />
+
+			<p:panel id="panelUsuario" header="#{msgs['label.user']}">
+				
+				<h:panelGroup rendered="#{not empty gerenciaUsuarioBean.usuario}">
+
+					<h:panelGrid columns="4" cellpadding="10" cellspacing="10">
+						<h:outputText value="#{msgs['label.nome']}" />
+						<p:inputText value="#{gerenciaUsuarioBean.usuario.nome}" 
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}" />
+
+						<h:outputText value="#{msgs['label.username']}" />
+						<p:inputText value="#{gerenciaUsuarioBean.usuario.login}" 
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}"/>
+
+						<h:outputText value="#{msgs['label.password']}" />
+						<p:password value="#{gerenciaUsuarioBean.usuario.senha}"
+							binding="#{passwordComponent}" 
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}" />
+
+						<h:outputText value="#{msgs['label.confirmPassword']}" />
+						<p:password id="confirmPassword"
+							value="#{gerenciaUsuarioBean.usuario.senhaConfirmacao}"
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}">
+							<f:validator validatorId="confirmPasswordValidator" />
+							<f:attribute name="passwordComponent"
+								value="#{passwordComponent}" />
+						</p:password>
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
+						<h:column>
+							<h:outputText value="#{msgs['label.department']}" />
+						</h:column>
+						<h:column>
+					        <p:selectOneListbox id="advanced" 
+					        	value="#{gerenciaUsuarioBean.usuario.departamento}" 
+					        	var="departamento" filter="true"
+					        	filterMatchMode="contains" converter="#{departamentoConverter}"
+					        	disabled="#{gerenciaUsuarioBean.somenteLeitura}"
+					        	styleClass="listbox">
+								<f:selectItems value="#{gerenciaUsuarioBean.departamentos}" 
+									var="departamento" itemLabel="#{departamento.nome}" 
+									itemValue="#{departamento}" />
+ 					            <p:column>
+					                <h:outputText value="#{departamento.nome}" />
+					            </p:column>
+					        </p:selectOneListbox>						
+        				</h:column>
+	
+					</h:panelGrid>
+
+				</h:panelGroup>
+
+				<f:facet name="footer">
+					<p:commandButton value="#{msgs['label.new']}" 
+						action="#{gerenciaUsuarioBean.novo()}"
+						resetValues="true" update="panelUsuario" />
+					<p:commandButton value="#{msgs['label.save']}" 
+						action="#{gerenciaUsuarioBean.salvar}"
+						resetValues="true"
+						process="panelUsuario" 
+						update="panelUsuario tabelaUsuarios" 
+						rendered="#{not empty gerenciaUsuarioBean.usuario
+							and not gerenciaUsuarioBean.somenteLeitura}" />
+				</f:facet>
+			
+			</p:panel>
+
 		</h:form>
 
 	</ui:define>

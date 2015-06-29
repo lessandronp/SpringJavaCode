@@ -1,7 +1,3 @@
-/**
- *
- *
- */
 package com.solucaocriativa.config;
 
 import org.springframework.beans.BeansException;

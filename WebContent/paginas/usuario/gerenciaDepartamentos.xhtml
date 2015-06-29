@@ -11,9 +11,65 @@
 
 	<ui:define name="content">
 
-		<h:form prependId="false">
+		<f:metadata>
+			<f:viewAction phase="APPLY_REQUEST_VALUES"
+				action="#{gerenciaDepartamentoBean.init()}" />
+		</f:metadata>
+
+		<h:form id="formDepartamentos" prependId="false">
+
+			<p:panel header="#{msgs['label.departments']}">
+
+				<p:dataTable id="tabelaDepartamentos" var="departamento"
+					value="#{gerenciaDepartamentoBean.departamentos}">
+					<p:column headerText="#{msgs['label.nome']}" style="width: 30%">
+						<h:outputText value="#{departamento.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
+						<p:commandButton value="#{msgs['label.view']}"
+							action="#{gerenciaDepartamentoBean.visualizar(departamento)}"
+							update=":formDepartamentos:panelDepartamento" />
+						<p:commandButton value="#{msgs['label.edit']}"
+							action="#{gerenciaDepartamentoBean.editar(departamento)}"
+							update=":formDepartamentos:panelDepartamento" />
+						<p:commandButton value="#{msgs['label.delete']}"
+							action="#{gerenciaDepartamentoBean.remover(departamento)}"
+							update="tabelaDepartamentos" />
+					</p:column>
+				</p:dataTable>
+
+			</p:panel>
 			
+			<p:spacer height="10" width="1" />
+
+			<p:panel id="panelDepartamento" header="#{msgs['label.department']}">
+				
+				<h:panelGroup rendered="#{not empty gerenciaDepartamentoBean.departamento}">
+
+					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
+						<h:outputText value="#{msgs['label.nome']}" />
+						<p:inputText value="#{gerenciaDepartamentoBean.departamento.nome}" 
+							readonly="#{gerenciaDepartamentoBean.somenteLeitura}" />
+
+					</h:panelGrid>
+
+				</h:panelGroup>
+
+				<f:facet name="footer">
+					<p:commandButton value="#{msgs['label.new']}" 
+						action="#{gerenciaDepartamentoBean.novo()}"
+						resetValues="true" update="panelDepartamento" />
+					<p:commandButton value="#{msgs['label.save']}" 
+						action="#{gerenciaDepartamentoBean.salvar}"
+						resetValues="true"
+						process="panelDepartamento" 
+						update="panelDepartamento tabelaDepartamentos" 
+						rendered="#{not empty gerenciaDepartamentoBean.departamento
+							and not gerenciaDepartamentoBean.somenteLeitura}" />
+				</f:facet>
 			
+			</p:panel>
+
 		</h:form>
 
 	</ui:define>

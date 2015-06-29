@@ -1,4 +1,4 @@
-package com.solucaocriativa.config;
+package com.solucaocriativa.jsf;
 
 import java.util.Iterator;
 import javax.faces.FacesException;
@@ -39,7 +39,7 @@ public class ViewExpiredExceptionHandler extends ExceptionHandlerWrapper {
 
 		try {
 		    navHandler.handleNavigation(context, null,
-			    "index.jsf?faces-redirect=true&expired=true");
+			    "index.xhtml?faces-redirect=true&expired=true");
 		} finally {
 		    it.remove();
 		}

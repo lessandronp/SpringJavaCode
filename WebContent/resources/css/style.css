@@ -11,3 +11,7 @@
 	overflow: inherit !important;
 	width: 300px !important;
 }
+
+.listbox {
+	width: 565px !important;
+}

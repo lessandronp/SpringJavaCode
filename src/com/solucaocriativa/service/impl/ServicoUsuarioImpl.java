@@ -1,7 +1,6 @@
 package com.solucaocriativa.service.impl;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;

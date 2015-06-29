@@ -22,16 +22,22 @@
 		<navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
 		<view-handler>org.primefaces.application.DialogViewHandler</view-handler>
 
-		<system-event-listener>
+        <system-event-listener>
+			<system-event-listener-class>com.solucaocriativa.jsf.ViewScopeCallbackRegister</system-event-listener-class>
+			<system-event-class>javax.faces.event.PostConstructViewMapEvent</system-event-class>
+			<source-class>javax.faces.component.UIViewRoot</source-class>
 		</system-event-listener>
 
 		<system-event-listener>
+			<system-event-listener-class>com.solucaocriativa.jsf.ViewScopeCallbackRegister</system-event-listener-class>
+			<system-event-class>javax.faces.event.PreDestroyViewMapEvent</system-event-class>
+			<source-class>javax.faces.component.UIViewRoot</source-class>
 		</system-event-listener>
 
 	</application>
 
 	<factory>
-		<exception-handler-factory>com.solucaocriativa.config.CustomExceptionHandlerFactory</exception-handler-factory>
+		<exception-handler-factory>com.solucaocriativa.jsf.CustomExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 
 </faces-config>

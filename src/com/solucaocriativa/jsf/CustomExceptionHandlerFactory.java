@@ -1,5 +1,5 @@
 
-package com.solucaocriativa.config;
+package com.solucaocriativa.jsf;
 
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;

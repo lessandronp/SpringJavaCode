@@ -44,7 +44,7 @@ public class Usuario implements Cloneable, UserDetails {
     @Transient
     private String senhaConfirmacao;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_depto", referencedColumnName = "id_departamento", 
     	nullable = false)
     private Departamento departamento;
@@ -104,8 +104,16 @@ public class Usuario implements Cloneable, UserDetails {
         this.nome = nome;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
     }
 
     public void setSenha(String senha) {
@@ -122,5 +130,13 @@ public class Usuario implements Cloneable, UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
 }

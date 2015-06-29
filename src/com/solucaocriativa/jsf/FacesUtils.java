@@ -18,8 +18,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.solucaocriativa.util.Constants;
-
 public class FacesUtils {
 
     public static void addErrorMessageExcecao(Exception ex, String defaultMsg) {
@@ -52,8 +50,9 @@ public class FacesUtils {
 	return mensagem;
     }
 
-    public static void addErrorMessage(String msg) {
-	msgErroComponente(null, msg);
+    public static FacesMessage addErrorMessage(String msg) {
+	FacesMessage message = msgErroComponente(null, msg);
+	return message;
     }
 
     public static void addErrorMessageWithAsterisk(String msg) {
@@ -80,14 +79,16 @@ public class FacesUtils {
 	addWarningMessageComponent(null, msg);
     }
 
-    public static void msgSucessoComponente(String idComponente, String msg) {
+    public static FacesMessage msgSucessoComponente(String idComponente, String msg) {
 	FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, 
 		getBundle().getString(msg), getBundle().getString(msg));
 	FacesContext.getCurrentInstance().addMessage(idComponente, mensagem);
+	return mensagem;
     }
 
-    public static void addSuccessMessage(String msg) {
-	msgSucessoComponente(null, msg);
+    public static FacesMessage addSuccessMessage(String msg) {
+	FacesMessage mensagem = msgSucessoComponente(null, msg);
+	return mensagem;
     }
 
     public static String getRequestParameter(final String param) {

@@ -24,7 +24,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
 
 	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-//        ctx.register(SpringConfig.class);
         ctx.setServletContext(servletContext);
         
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
@@ -56,7 +55,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
         servletContext.setInitParameter("log4jConfigLocation", "classpath:/META-INF/log4j.properties");
         servletContext.setInitParameter("org.ajax4jsf.handleViewExpiredOnClient", "true");
         servletContext.setInitParameter("primefaces.THEME", "start");
-        servletContext.setInitParameter("org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL", "true");
         servletContext.setInitParameter("primefaces.CLIENT_SIDE_VALIDATION", "true");
         servletContext.setInitParameter("primefaces.UPLOADER", "commons");
         servletContext.setInitParameter("primefaces.PRIVATE_CAPTCHA_KEY", 
@@ -74,8 +72,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
 	servletContext.addListener(new ContextLoaderListener(ctx));   
         servletContext.addListener(new RequestContextListener());
         servletContext.addListener(new Log4jConfigListener()); 
-//        servletContext.addListener(ConfigureListener.class);
-        
     }        
         
 }

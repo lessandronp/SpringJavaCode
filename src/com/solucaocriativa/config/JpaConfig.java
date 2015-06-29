@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = "com.solucaocriativa")
 @EnableTransactionManagement
 @PropertySource("classpath:META-INF/application.properties")
-public class AppConfig {
+public class JpaConfig {
 
     @Autowired
     private Environment env;
@@ -90,6 +90,7 @@ public class AppConfig {
 		.parseBoolean(dbInitializationEnabled));
 	dataSourceInitializer.setDataSource(dataSource);
 	ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+	databasePopulator.setSqlScriptEncoding("UTF-8");
 	String dbInitScriptLocation = env
 		.resolvePlaceholders("${jdbc.initLocation}");
 	if (StringUtils.isNotEmpty(dbInitScriptLocation)) {
