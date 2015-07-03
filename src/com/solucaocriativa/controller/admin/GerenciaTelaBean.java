@@ -80,6 +80,7 @@ public class GerenciaTelaBean implements Serializable {
 	try {
 	    this.servicoTela.remove(tela);
 	    message = FacesUtils.addSuccessMessage("msg.deleteScreen.success");
+	    init();
 	} catch (Exception e) {
 	    log.error(e.getMessage());
 	    message = FacesUtils.addErrorMessage("msg.deleteScreen.error");

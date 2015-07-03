@@ -47,7 +47,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
 	servletContext.addFilter("PrimeFaces FileUpload Filter",
 		new FileUploadFilter());        
 
-        servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Development");
+//        servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Development");
+      servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Production");
         servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml");
         servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING", "true");
         servletContext.setInitParameter("javax.faces.STATE_SAVING_METHOD", "client");
@@ -64,8 +65,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
         servletContext.setInitParameter("contextClass", 
         	"org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
         servletContext.setInitParameter("contextConfigLocation", "com.solucaocriativa.config");
-        servletContext.setInitParameter("static-resources-list", "/app/*");
-        servletContext.setInitParameter("static-welcome-file", "index.xhtml");
         servletContext.setInitParameter("javax.faces.FACELETS_LIBRARIES", "/WEB-INF/springsecurity.taglib.xml");
         
         ServletRegistration.Dynamic facesServlet = servletContext.addServlet("Faces Servlet", FacesServlet.class);

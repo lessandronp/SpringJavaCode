@@ -109,6 +109,7 @@ public class GerenciaPermissaoTelaDeptoBean implements Serializable {
 	try {
 	    this.servicoPermissaoTelaDepartamento.remove(permissaoTelaDepartamento);
 	    message = FacesUtils.addSuccessMessage("msg.deletePermissionScreenDepartment.success");
+	    init();
 	} catch (Exception e) {
 	    log.error(e.getMessage());
 	    message = FacesUtils.addErrorMessage("msg.deletePermissionScreenDepartment.error");

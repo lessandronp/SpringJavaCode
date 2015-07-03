@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/resources/templates/template.xhtml"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
 
 	<ui:define name="header">
 		<ui:include src="/paginas/cabecalho.xhtml" />
@@ -26,22 +27,28 @@
 						<h:outputText value="#{usuario.nome}" />
 					</p:column>
 					<p:column headerText="#{msgs['label.username']}" style="width: 20%">
-						<h:outputText value="#{usuario.username}" />
+						<h:outputText value="#{usuario.login}" />
 					</p:column>
 					<p:column headerText="#{msgs['label.department']}"
 						style="width: 20%">
 						<h:outputText value="#{usuario.departamento.nome}" />
 					</p:column>
 					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
-						<p:commandButton value="#{msgs['label.view']}"
-							action="#{gerenciaUsuarioBean.visualizar(usuario)}"
-							update=":formUsuarios:panelUsuario" />
-						<p:commandButton value="#{msgs['label.edit']}"
-							action="#{gerenciaUsuarioBean.editar(usuario)}"
-							update=":formUsuarios:panelUsuario" />
-						<p:commandButton value="#{msgs['label.delete']}"
-							action="#{gerenciaUsuarioBean.remover(usuario)}"
-							update="tabelaUsuarios" />
+						<sec:authorize ifAllGranted="ROLE_gerenciaUsuarios_VISUALIZAR">
+							<p:commandButton value="#{msgs['label.view']}"
+								action="#{gerenciaUsuarioBean.visualizar(usuario)}"
+								update=":formUsuarios:panelUsuario" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaUsuarios_EDITAR">
+							<p:commandButton value="#{msgs['label.edit']}"
+								action="#{gerenciaUsuarioBean.editar(usuario)}"
+								update=":formUsuarios:panelUsuario" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaUsuarios_EXCLUIR">
+							<p:commandButton value="#{msgs['label.delete']}"
+								action="#{gerenciaUsuarioBean.remover(usuario)}"
+								update="tabelaUsuarios" />
+						</sec:authorize>
 					</p:column>
 				</p:dataTable>
 
@@ -107,16 +114,20 @@
 				</h:panelGroup>
 
 				<f:facet name="footer">
-					<p:commandButton value="#{msgs['label.new']}" 
-						action="#{gerenciaUsuarioBean.novo()}"
-						resetValues="true" update="panelUsuario" />
-					<p:commandButton value="#{msgs['label.save']}" 
-						action="#{gerenciaUsuarioBean.salvar}"
-						resetValues="true"
-						process="panelUsuario" 
-						update="panelUsuario tabelaUsuarios" 
-						rendered="#{not empty gerenciaUsuarioBean.usuario
-							and not gerenciaUsuarioBean.somenteLeitura}" />
+					<sec:authorize ifAllGranted="ROLE_gerenciaUsuarios_INCLUIR">
+						<p:commandButton value="#{msgs['label.new']}" 
+							action="#{gerenciaUsuarioBean.novo()}"
+							resetValues="true" update="panelUsuario" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaUsuarios_INCLUIR">
+						<p:commandButton value="#{msgs['label.save']}" 
+							action="#{gerenciaUsuarioBean.salvar}"
+							resetValues="true"
+							process="panelUsuario" 
+							update="panelUsuario tabelaUsuarios" 
+							rendered="#{not empty gerenciaUsuarioBean.usuario
+								and not gerenciaUsuarioBean.somenteLeitura}" />
+					</sec:authorize>
 				</f:facet>
 			
 			</p:panel>

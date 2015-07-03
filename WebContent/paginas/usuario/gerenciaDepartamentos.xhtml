@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/resources/templates/template.xhtml"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
 
 	<ui:define name="header">
 		<ui:include src="/paginas/cabecalho.xhtml" />
@@ -26,15 +27,21 @@
 						<h:outputText value="#{departamento.nome}" />
 					</p:column>
 					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
+					<sec:authorize ifAllGranted="ROLE_gerenciaDepartamentos_VISUALIZAR">
 						<p:commandButton value="#{msgs['label.view']}"
 							action="#{gerenciaDepartamentoBean.visualizar(departamento)}"
 							update=":formDepartamentos:panelDepartamento" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaDepartamentos_EDITAR">
 						<p:commandButton value="#{msgs['label.edit']}"
 							action="#{gerenciaDepartamentoBean.editar(departamento)}"
 							update=":formDepartamentos:panelDepartamento" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaDepartamentos_EXCLUIR">
 						<p:commandButton value="#{msgs['label.delete']}"
 							action="#{gerenciaDepartamentoBean.remover(departamento)}"
 							update="tabelaDepartamentos" />
+					</sec:authorize>
 					</p:column>
 				</p:dataTable>
 
@@ -57,16 +64,20 @@
 				</h:panelGroup>
 
 				<f:facet name="footer">
-					<p:commandButton value="#{msgs['label.new']}" 
-						action="#{gerenciaDepartamentoBean.novo()}"
-						resetValues="true" update="panelDepartamento" />
-					<p:commandButton value="#{msgs['label.save']}" 
-						action="#{gerenciaDepartamentoBean.salvar}"
-						resetValues="true"
-						process="panelDepartamento" 
-						update="panelDepartamento tabelaDepartamentos" 
-						rendered="#{not empty gerenciaDepartamentoBean.departamento
-							and not gerenciaDepartamentoBean.somenteLeitura}" />
+					<sec:authorize ifAllGranted="ROLE_gerenciaDepartamentos_INCLUIR">
+						<p:commandButton value="#{msgs['label.new']}" 
+							action="#{gerenciaDepartamentoBean.novo()}"
+							resetValues="true" update="panelDepartamento" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaDepartamentos_INCLUIR">
+						<p:commandButton value="#{msgs['label.save']}" 
+							action="#{gerenciaDepartamentoBean.salvar}"
+							resetValues="true"
+							process="panelDepartamento" 
+							update="panelDepartamento tabelaDepartamentos" 
+							rendered="#{not empty gerenciaDepartamentoBean.departamento
+								and not gerenciaDepartamentoBean.somenteLeitura}" />
+					</sec:authorize>
 				</f:facet>
 			
 			</p:panel>

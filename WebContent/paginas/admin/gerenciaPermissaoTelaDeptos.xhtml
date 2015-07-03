@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/resources/templates/template.xhtml"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
 
 	<ui:define name="header">
 		<ui:include src="/paginas/cabecalho.xhtml" />
@@ -45,15 +46,21 @@
 						<h:outputText value="#{gerenciaPermissaoTelaDeptoBean.exibePermissao(permissaoTelaDepartamento.permiteExcluir)}" />
 					</p:column>
 					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
-						<p:commandButton value="#{msgs['label.view']}"
-							action="#{gerenciaPermissaoTelaDeptoBean.visualizar(permissaoTelaDepartamento)}"
-							update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
-						<p:commandButton value="#{msgs['label.edit']}"
-							action="#{gerenciaPermissaoTelaDeptoBean.editar(permissaoTelaDepartamento)}"
-							update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
-						<p:commandButton value="#{msgs['label.delete']}"
-							action="#{gerenciaPermissaoTelaDeptoBean.remover(permissaoTelaDepartamento)}"
-							update="tabelaPermissaoTelaDepartamentos" />
+						<sec:authorize ifAllGranted="ROLE_gerenciaPermissaoTelaDeptos_VISUALIZAR">
+							<p:commandButton value="#{msgs['label.view']}"
+								action="#{gerenciaPermissaoTelaDeptoBean.visualizar(permissaoTelaDepartamento)}"
+								update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaPermissaoTelaDeptos_EDITAR">
+							<p:commandButton value="#{msgs['label.edit']}"
+								action="#{gerenciaPermissaoTelaDeptoBean.editar(permissaoTelaDepartamento)}"
+								update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaPermissaoTelaDeptos_EXCLUIR">
+							<p:commandButton value="#{msgs['label.delete']}"
+								action="#{gerenciaPermissaoTelaDeptoBean.remover(permissaoTelaDepartamento)}"
+								update="tabelaPermissaoTelaDepartamentos" />
+						</sec:authorize>
 					</p:column>
 				</p:dataTable>
 
@@ -111,15 +118,19 @@
 				</h:panelGroup>
 
 				<f:facet name="footer">
-					<p:commandButton value="#{msgs['label.new']}" 
-						action="#{gerenciaPermissaoTelaDeptoBean.novo()}"
-						resetValues="true" update="panelPermissaoTelaDepartamento" />
-					<p:commandButton value="#{msgs['label.save']}" 
-						action="#{gerenciaPermissaoTelaDeptoBean.salvar}"
-						process="panelPermissaoTelaDepartamento" 
-						update="panelPermissaoTelaDepartamento tabelaPermissaoTelaDepartamentos" 
-						rendered="#{not empty gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento
-							and not gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+					<sec:authorize ifAllGranted="ROLE_gerenciaPermissaoTelaDeptos_INCLUIR">
+						<p:commandButton value="#{msgs['label.new']}" 
+							action="#{gerenciaPermissaoTelaDeptoBean.novo()}"
+							resetValues="true" update="panelPermissaoTelaDepartamento" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaPermissaoTelaDeptos_INCLUIR">
+						<p:commandButton value="#{msgs['label.save']}" 
+							action="#{gerenciaPermissaoTelaDeptoBean.salvar}"
+							process="panelPermissaoTelaDepartamento" 
+							update="panelPermissaoTelaDepartamento tabelaPermissaoTelaDepartamentos" 
+							rendered="#{not empty gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento
+								and not gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+					</sec:authorize>
 				</f:facet>
 			
 			</p:panel>

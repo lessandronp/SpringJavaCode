@@ -72,6 +72,7 @@ public class GerenciaDepartamentoBean implements Serializable {
 	try {
 	    this.servicoDepartamento.remove(departamento);
 	    message = FacesUtils.addSuccessMessage("msg.deleteDepartment.success");
+	    init();
 	} catch (Exception e) {
 	    log.error(e.getMessage());
 	    message = FacesUtils.addErrorMessage("msg.deleteDepartment.error");

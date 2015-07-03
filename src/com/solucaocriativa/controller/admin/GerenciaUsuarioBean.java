@@ -80,6 +80,7 @@ public class GerenciaUsuarioBean implements Serializable {
 	try {
 	    this.servicoUsuario.remove(usuario);
 	    message = FacesUtils.addSuccessMessage("msg.deleteUser.success");
+	    init();
 	} catch (Exception e) {
 	    log.error(e.getMessage());
 	    message = FacesUtils.addErrorMessage("msg.deleteUser.error");

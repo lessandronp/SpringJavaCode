@@ -19,10 +19,9 @@ import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -56,7 +55,8 @@ public class JpaConfig {
 	    DataSource dataSource) {
 	LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 
-	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+	EclipseLinkJpaVendorAdapter vendorAdapter = new EclipseLinkJpaVendorAdapter();
+	//	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 	vendorAdapter.setGenerateDdl(Boolean.TRUE);
 	vendorAdapter.setShowSql(Boolean.TRUE);
 
@@ -65,10 +65,24 @@ public class JpaConfig {
 	factory.setPackagesToScan("com.solucaocriativa.entidade");
 
 	Properties jpaProperties = new Properties();
-	jpaProperties.put("hibernate.hbm2ddl.auto",
-		env.getProperty("hibernate.hbm2ddl.auto"));
-	jpaProperties.put("hibernate.dialect",
-		env.getProperty("hibernate.dialect"));
+//	jpaProperties.put("hibernate.hbm2ddl.auto",
+//		env.getProperty("hibernate.hbm2ddl.auto"));
+//	jpaProperties.put("hibernate.dialect",
+//		env.getProperty("hibernate.dialect"));
+	jpaProperties.put("eclipselink.target-database",
+		env.getProperty("target-database"));
+	jpaProperties.put("eclipselink.ddl-generation",
+		env.getProperty("ddl-generation"));
+	jpaProperties.put("eclipselink.ddl-generation.output-mode",
+		env.getProperty("ddl-generation.output-mode"));
+	jpaProperties.put("eclipselink.logging.level",
+		env.getProperty("logging.level"));
+	jpaProperties.put("eclipselink.logging.level.sql",
+		env.getProperty("logging.level.sql"));
+	jpaProperties.put("eclipselink.logging.parameters",
+		env.getProperty("logging.parameters"));
+	jpaProperties.put("eclipselink.weaving",
+		env.getProperty("eclipselink.weaving"));
 	factory.setJpaProperties(jpaProperties);
 
 	factory.afterPropertiesSet();
@@ -76,10 +90,10 @@ public class JpaConfig {
 	return factory;
     }
 
-    @Bean
-    public HibernateExceptionTranslator hibernateExceptionTranslator() {
-	return new HibernateExceptionTranslator();
-    }
+//    @Bean
+//    public HibernateExceptionTranslator hibernateExceptionTranslator() {
+//	return new HibernateExceptionTranslator();
+//    }
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
