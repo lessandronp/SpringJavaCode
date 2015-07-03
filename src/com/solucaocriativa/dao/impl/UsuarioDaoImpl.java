@@ -42,7 +42,6 @@ public class UsuarioDaoImpl extends DaoGenericoImpl<Usuario, Long> implements Us
 	    return !users.isEmpty() ? users.get(0) : null;
 	} catch (Exception ex) {
 	    log.error(ex);
-	} finally {
 	}
 	return null;
     }

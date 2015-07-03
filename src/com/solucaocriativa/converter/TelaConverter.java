@@ -13,30 +13,30 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import com.solucaocriativa.entidade.Departamento;
-import com.solucaocriativa.service.ServicoDepartamento;
+import com.solucaocriativa.entidade.Tela;
+import com.solucaocriativa.service.ServicoTela;
 
-@Named("departamentoConverter")
+@Named("telaConverter")
 @Scope("view")
-@FacesConverter("departamentoConverter")
-public class DepartamentoConverter implements Converter, Serializable {
+@FacesConverter("telaConverter")
+public class TelaConverter implements Converter, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private ServicoDepartamento servicoDepartamento;
+    private ServicoTela servicoTela;
 
     @Inject
-    public DepartamentoConverter(ServicoDepartamento servicoDepartamento) {
-	this.servicoDepartamento = servicoDepartamento;
+    public TelaConverter(ServicoTela servicoTela) {
+	this.servicoTela = servicoTela;
     }
     
-    public DepartamentoConverter() {
+    public TelaConverter() {
     }
     
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
 	if (value != null && value.trim().length() > 0) {
 	    try {
-		Departamento departamento = servicoDepartamento.buscaPorId(Long.parseLong(value));
-		return departamento;
+		Tela tela = servicoTela.buscaPorId(Long.parseLong(value));
+		return tela;
 	    } catch (NumberFormatException e) {
 		throw new ConverterException(
 			new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -49,7 +49,7 @@ public class DepartamentoConverter implements Converter, Serializable {
 
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
 	if (object != null) {
-	    return String.valueOf(((Departamento) object).getId());
+	    return String.valueOf(((Tela) object).getId());
 	} else {
 	    return null;
 	}

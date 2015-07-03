@@ -18,22 +18,22 @@
 			<p:menuitem value="Gerenciar Departamentos" 
 				url="/paginas/usuario/gerenciaDepartamentos.xhtml"
 				icon="ui-icon-arrowreturnthick-1-w" />
-			<p:menuitem value="Gerenciar Alocações" 
-				url="/paginas/usuario/gerenciaAlocacoes.xhtml"
-				icon="ui-icon-arrowreturnthick-1-w" />
 		</p:submenu>
 
 		<p:submenu label="Telas" icon="ui-icon-pencil">
 			<p:menuitem value="Gerenciar Telas" 
 				url="/paginas/admin/gerenciaTelas.xhtml"
 				icon="ui-icon-arrowreturnthick-1-w" />
-			<p:menuitem value="Gerenciar Permissão Telas" 
-				url="/paginas/admin/gerenciaPermissaoTelas.xhtml"
+			<p:menuitem value="Gerenciar Permissão de Tela por Departamento" 
+				url="/paginas/admin/gerenciaPermissaoTelaDeptos.xhtml"
 				icon="ui-icon-arrowreturnthick-1-w" />
 		</p:submenu>
 
-		<p:menuitem value="Sair" url="http://www.primefaces.org"
-			icon="ui-icon-close" />
+		<p:submenu label="#{homeBean.usuarioAutenticado.nome}" icon="ui-icon-pencil">
+			<p:menuitem value="Sair" url="/logout" icon="ui-icon-close" 
+				ajax="false" />
+		</p:submenu>
+
 
 	</p:menubar>
 </h:form>

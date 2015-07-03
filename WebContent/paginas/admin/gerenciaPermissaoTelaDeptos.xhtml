@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/resources/templates/template.xhtml"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="header">
+		<ui:include src="/paginas/cabecalho.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<f:viewAction phase="APPLY_REQUEST_VALUES"
+				action="#{gerenciaPermissaoTelaDeptoBean.init()}" />
+		</f:metadata>
+
+		<h:form id="formPermissaoTelaDepartamentos" prependId="false">
+
+			<p:panel header="#{msgs['label.permissionsDepartmentScreen']}">
+
+				<p:dataTable id="tabelaPermissaoTelaDepartamentos" var="permissaoTelaDepartamento"
+					value="#{gerenciaPermissaoTelaDeptoBean.permissoesTelaDepartamento}">
+					<p:column headerText="#{msgs['label.department']}" style="width: 20%">
+						<h:outputText value="#{permissaoTelaDepartamento.departamento.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.screen']}" style="width: 20%">
+						<h:outputText value="#{permissaoTelaDepartamento.tela.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.allowView']}"
+						style="width: 10%">
+						<h:outputText value="#{gerenciaPermissaoTelaDeptoBean.exibePermissao(permissaoTelaDepartamento.permiteVisualizar)}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.allowInclude']}"
+						style="width: 10%">
+						<h:outputText value="#{gerenciaPermissaoTelaDeptoBean.exibePermissao(permissaoTelaDepartamento.permiteIncluir)}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.allowEdit']}"
+						style="width: 10%">
+						<h:outputText value="#{gerenciaPermissaoTelaDeptoBean.exibePermissao(permissaoTelaDepartamento.permiteEditar)}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.allowDelete']}"
+						style="width: 10%">
+						<h:outputText value="#{gerenciaPermissaoTelaDeptoBean.exibePermissao(permissaoTelaDepartamento.permiteExcluir)}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
+						<p:commandButton value="#{msgs['label.view']}"
+							action="#{gerenciaPermissaoTelaDeptoBean.visualizar(permissaoTelaDepartamento)}"
+							update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
+						<p:commandButton value="#{msgs['label.edit']}"
+							action="#{gerenciaPermissaoTelaDeptoBean.editar(permissaoTelaDepartamento)}"
+							update=":formPermissaoTelaDepartamentos:panelPermissaoTelaDepartamento" />
+						<p:commandButton value="#{msgs['label.delete']}"
+							action="#{gerenciaPermissaoTelaDeptoBean.remover(permissaoTelaDepartamento)}"
+							update="tabelaPermissaoTelaDepartamentos" />
+					</p:column>
+				</p:dataTable>
+
+			</p:panel>
+			
+			<p:spacer height="10" width="1" />
+
+			<p:panel id="panelPermissaoTelaDepartamento" header="#{msgs['label.permissionDepartmentScreen']}">
+				
+				<h:panelGroup rendered="#{not empty gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento}">
+
+					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
+					
+						<h:outputText value="#{msgs['label.screen']}" />
+						<p:selectOneMenu id="tela" name="tela"
+							value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.tela}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}"
+							converter="#{telaConverter}">
+							<f:selectItem itemValue="#{null}" itemLabel="#{msgs['label.select']}" />
+							<f:selectItems var="tela" value="#{gerenciaPermissaoTelaDeptoBean.telas}"
+								itemLabel="#{tela.nome}" itemValue="#{tela}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="#{msgs['label.department']}" />
+						<p:selectOneMenu id="departamento" name="departamento"
+							value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.departamento}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}"
+							converter="#{departamentoConverter}">
+							<f:selectItem itemValue="#{null}" itemLabel="#{msgs['label.select']}" />
+							<f:selectItems var="departamento" value="#{gerenciaPermissaoTelaDeptoBean.departamentos}"
+								itemLabel="#{departamento.nome}" itemValue="#{departamento}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="#{msgs['label.allowView']}" />
+						<p:selectBooleanCheckbox 
+							value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.permiteVisualizar}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+
+						<h:outputText value="#{msgs['label.allowInclude']}" />
+						<p:selectBooleanCheckbox 
+							value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.permiteIncluir}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+
+						<h:outputText value="#{msgs['label.allowEdit']}" />
+						<p:selectBooleanCheckbox 
+							value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.permiteEditar}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+
+						<h:outputText value="#{msgs['label.allowDelete']}" />
+						<p:selectBooleanCheckbox value="#{gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento.permiteExcluir}" 
+							disabled="#{gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+
+					</h:panelGrid>
+
+				</h:panelGroup>
+
+				<f:facet name="footer">
+					<p:commandButton value="#{msgs['label.new']}" 
+						action="#{gerenciaPermissaoTelaDeptoBean.novo()}"
+						resetValues="true" update="panelPermissaoTelaDepartamento" />
+					<p:commandButton value="#{msgs['label.save']}" 
+						action="#{gerenciaPermissaoTelaDeptoBean.salvar}"
+						process="panelPermissaoTelaDepartamento" 
+						update="panelPermissaoTelaDepartamento tabelaPermissaoTelaDepartamentos" 
+						rendered="#{not empty gerenciaPermissaoTelaDeptoBean.permissaoTelaDepartamento
+							and not gerenciaPermissaoTelaDeptoBean.somenteLeitura}" />
+				</f:facet>
+			
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="footer">
+	</ui:define>
+
+</ui:composition>

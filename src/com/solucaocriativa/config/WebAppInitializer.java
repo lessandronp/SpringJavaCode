@@ -64,6 +64,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
         servletContext.setInitParameter("contextClass", 
         	"org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
         servletContext.setInitParameter("contextConfigLocation", "com.solucaocriativa.config");
+        servletContext.setInitParameter("static-resources-list", "/app/*");
+        servletContext.setInitParameter("static-welcome-file", "index.xhtml");
+        servletContext.setInitParameter("javax.faces.FACELETS_LIBRARIES", "/WEB-INF/springsecurity.taglib.xml");
         
         ServletRegistration.Dynamic facesServlet = servletContext.addServlet("Faces Servlet", FacesServlet.class);
         facesServlet.setLoadOnStartup(1);

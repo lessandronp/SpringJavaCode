@@ -3,17 +3,128 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="/resources/templates/template.xhtml"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
 
 	<ui:define name="header">
 		<ui:include src="/paginas/cabecalho.xhtml" />
 	</ui:define>
 
+	<ui:define name="javascript">
+	
+		<script type="text/javascript">
+		
+		//<![CDATA[
+			
+			function applyChecked(checkbox) {
+				$(checkbox).attr('activeChecked', checkbox.checked);
+				$('input:checkbox').removeAttr('checked');
+				if ($(checkbox).attr('activeChecked') === 'true') {
+					checkbox.checked = true;
+				} else {
+					checkbox.checked = false;
+				}
+			}
+			
+			//]]>
+		</script>
+	
+	</ui:define>
+	
 	<ui:define name="content">
 
-		<h:form prependId="false">
+		<f:metadata>
+			<f:viewAction phase="APPLY_REQUEST_VALUES"
+				action="#{gerenciaTelaBean.init()}" />
+		</f:metadata>
+		
+		<h:form id="formTelas" prependId="false">
+
+			<p:panel header="#{msgs['label.screens']}">
+
+				<p:dataTable id="tabelaTelas" var="tela"
+					value="#{gerenciaTelaBean.telas}">
+					<p:column headerText="#{msgs['label.nome']}" style="width: 30%">
+						<h:outputText value="#{tela.nome}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.code']}" style="width: 30%">
+						<h:outputText value="#{tela.codigo}" />
+					</p:column>
+					<p:column headerText="#{msgs['label.action']}" style="width: 30%">
+												
+						<sec:authorize ifAllGranted="ROLE_gerenciaTelas_VISUALIZAR">
+							<p:commandButton value="#{msgs['label.view']}"
+								action="#{gerenciaTelaBean.visualizar(tela)}"
+								update=":formTelas:panelTela" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaTelas_EDITAR">
+							<p:commandButton value="#{msgs['label.edit']}"
+								action="#{gerenciaTelaBean.editar(tela)}"
+								update=":formTelas:panelTela" />
+						</sec:authorize>
+						<sec:authorize ifAllGranted="ROLE_gerenciaTelas_EXCLUIR">
+							<p:commandButton value="#{msgs['label.delete']}"
+								action="#{gerenciaTelaBean.remover(tela)}"
+								update="tabelaTelas" />
+						</sec:authorize>
+					</p:column>
+				</p:dataTable>
+
+			</p:panel>
 			
+			<p:spacer height="10" width="1" />
+
+			<p:panel id="panelTela" header="#{msgs['label.screen']}">
+				
+				<h:panelGroup rendered="#{not empty gerenciaTelaBean.tela}">
+				
+					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
+					
+						<h:column />
+						<p:dataTable var="tela" value="#{gerenciaTelaBean.telasDisponiveis}">
+							<f:facet name="header">
+					          Telas Disponíveis
+						    </f:facet>
+
+							<p:column headerText="Selecionada">
+								<h:selectBooleanCheckbox id="checkBox" value="#{tela.selecionada}" 
+									disabled="#{gerenciaTelaBean.somenteLeitura}" 
+									onchange="applyChecked(this);" />
+							</p:column>
+
+							<p:column headerText="Tela">
+								<h:outputText value="#{tela.codigo}" />
+							</p:column>
+						</p:dataTable>
+
+						<h:outputText value="#{msgs['label.name']}" />
+						<p:inputText value="#{gerenciaTelaBean.tela.nome}" 
+							readonly="#{gerenciaTelaBean.somenteLeitura}" 
+							size="50" maxlength="50" />
+
+					</h:panelGrid>
+
+				</h:panelGroup>
+
+				<f:facet name="footer">
+					<sec:authorize ifAllGranted="ROLE_gerenciaTelas_INCLUIR">
+						<p:commandButton value="#{msgs['label.new']}" 
+							action="#{gerenciaTelaBean.novo()}"
+							resetValues="true" update="panelTela" />
+					</sec:authorize>
+					<sec:authorize ifAllGranted="ROLE_gerenciaTelas_INCLUIR">
+						<p:commandButton value="#{msgs['label.save']}" 
+							action="#{gerenciaTelaBean.salvar}"
+							resetValues="true"
+							process="panelTela" 
+							update="panelTela tabelaTelas" 
+							rendered="#{not empty gerenciaTelaBean.tela
+								and not gerenciaTelaBean.somenteLeitura}" />
+					</sec:authorize>
+				</f:facet>
 			
+			</p:panel>
+
 		</h:form>
 
 	</ui:define>

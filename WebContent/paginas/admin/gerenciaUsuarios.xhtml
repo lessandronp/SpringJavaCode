@@ -53,24 +53,28 @@
 				
 				<h:panelGroup rendered="#{not empty gerenciaUsuarioBean.usuario}">
 
-					<h:panelGrid columns="4" cellpadding="10" cellspacing="10">
+					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
 						<h:outputText value="#{msgs['label.nome']}" />
 						<p:inputText value="#{gerenciaUsuarioBean.usuario.nome}" 
-							readonly="#{gerenciaUsuarioBean.somenteLeitura}" />
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}" 
+							size="100" maxlength="255" />
 
 						<h:outputText value="#{msgs['label.username']}" />
 						<p:inputText value="#{gerenciaUsuarioBean.usuario.login}" 
-							readonly="#{gerenciaUsuarioBean.somenteLeitura}"/>
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}" 
+							size="20" maxlength="20" />
 
 						<h:outputText value="#{msgs['label.password']}" />
 						<p:password value="#{gerenciaUsuarioBean.usuario.senha}"
 							binding="#{passwordComponent}" 
-							readonly="#{gerenciaUsuarioBean.somenteLeitura}" />
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}" 
+							size="32" maxlength="32" />
 
 						<h:outputText value="#{msgs['label.confirmPassword']}" />
 						<p:password id="confirmPassword"
 							value="#{gerenciaUsuarioBean.usuario.senhaConfirmacao}"
-							readonly="#{gerenciaUsuarioBean.somenteLeitura}">
+							readonly="#{gerenciaUsuarioBean.somenteLeitura}"
+							size="32" maxlength="32">
 							<f:validator validatorId="confirmPasswordValidator" />
 							<f:attribute name="passwordComponent"
 								value="#{passwordComponent}" />

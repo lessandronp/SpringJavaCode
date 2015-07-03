@@ -23,6 +23,7 @@ public class SecurityLoginSuccessHandler extends SimpleUrlAuthenticationSuccessH
     public void onAuthenticationSuccess(HttpServletRequest request,
 	    HttpServletResponse response, Authentication auth)
 	    throws IOException, ServletException {
+	
 	setDefaultTargetUrl(Constants.HOME);
 	super.onAuthenticationSuccess(request, response, auth);
     }

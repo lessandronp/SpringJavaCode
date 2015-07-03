@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 
 import com.solucaocriativa.filter.CustomAuthenticationProvider;
 import com.solucaocriativa.filter.SecurityLoginSuccessHandler;
-import com.solucaocriativa.util.Constants;
 
 @Configuration
 @EnableWebSecurity
@@ -29,23 +28,15 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 	
-//	List<UsuarioDepartamento> gruposUsuarios = servicoGrupoUsuario.buscaTodos();
 	ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry = http.authorizeRequests();
-//	    for (UsuarioDepartamento grupoUsuario : gruposUsuarios) {
-//	      if (grupoUsuario.getPermissoesGrupo().size() > 0) {
-//	        for (PermissaoGrupo permissaoGrupo : grupoUsuario.getPermissoesGrupo()) {
-//	          urlRegistry.antMatchers( permissaoGrupo.getTela().getUrl())
-//	          	.access(HAS_ROLE.concat(preparaRegra(grupoUsuario.getAuthority())).concat(HAS_ROLE_CLOSE));
-//	        }
-//	      }
-//	    }
 	 http = urlRegistry.and();
 	    
 	 http = http.authorizeRequests()
         	.antMatchers("/resources/**").permitAll()       
         	.antMatchers("/index.xhtml").permitAll()
         	.antMatchers("/erroLogin.xhtml").permitAll()
-//        	.antMatchers("/**").access("isAuthenticated()")                           
+        	.antMatchers("/logout").permitAll()
+        	.antMatchers("/paginas/**").access("isAuthenticated()")                           
 	.and().formLogin()
         	.loginPage("/index.xhtml")
         	.usernameParameter("j_username")
@@ -58,6 +49,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         	.passwordParameter("j_password")
         	.successHandler(securityLoginSuccessHandler)
         	.failureUrl("/erroLogin.xhtml")
+        .and().logout().logoutSuccessUrl("/index.xhtml")
 	.and().csrf().disable();
     }
 
@@ -70,13 +62,5 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 	web.ignoring().antMatchers("/resources/**");	
-    }
-    
-//    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-//        configurer.enable();
-//    }
-    
-    private String preparaRegra(String grantedAuthority) {
-	return Constants.ROLE_PREFFIX.concat(grantedAuthority.replaceAll(Constants.REGEX_ASC, "").toUpperCase());
     }
 }

@@ -2,19 +2,21 @@ package com.solucaocriativa.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.solucaocriativa.entidade.PermissaoTelaDepartamento;
 import com.solucaocriativa.entidade.Usuario;
+import com.solucaocriativa.service.ServicoPermissaoTelaDepartamento;
 import com.solucaocriativa.service.ServicoUsuario;
 import com.solucaocriativa.util.Constants;
 import com.solucaocriativa.util.Criptografia;
@@ -24,22 +26,24 @@ import com.solucaocriativa.util.MessageUtil;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private static Log log = LogFactory.getLog(CustomAuthenticationProvider.class);
-    private Usuario usuario;
-    
+
     @Autowired
     private ServicoUsuario usuarioService;
 
+    @Autowired
+    private ServicoPermissaoTelaDepartamento servicoPermissaoTelaDepartamento;
+    
     @Override
     public Authentication authenticate(Authentication auth) {
 
 	try {
 	    if (!auth.getName().isEmpty()) {
 
-		usuario = usuarioService.findUser(auth.getName());
+		Usuario usuario = usuarioService.findUser(auth.getName());
 
 		if (usuario != null) {
-		    validatePassword(auth);
-		    return validateNamePassword(auth);
+		    validatePassword(auth, usuario);
+		    return validateNamePassword(auth, usuario);
 		}
 	    }
 
@@ -58,39 +62,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
      * @param auth Autenticação
      * @return Autenticação
      */
-    private Authentication validateNamePassword(Authentication auth) {
+    private Authentication validateNamePassword(Authentication auth, Usuario usuario) {
+	
 	if (auth.getName().equals(auth.getCredentials())) {
 	    log.debug("O usuario informado e a senha sao os mesmos.");
 	    throw new BadCredentialsException("O usuario informado e a senha sao os mesmos.");
-	} else {
-	UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
-		new UsernamePasswordAuthenticationToken(usuario, 
-		auth.getCredentials(), montaAuthorities(usuario));
-	return usernamePasswordAuthenticationToken;
-	}
-    }
 
-    private Collection<? extends GrantedAuthority> montaAuthorities(
-	    Usuario usuario) {
-        //	for(PermissaoGrupo pg :  grupoUsuario.getPermissoesGrupo() ) ){
-        //	    String nomeTela = pg.getTela().getNome();
-        //	    if(StatusQuestionType.YES.equals(pg.getPermiteIncluir())) {
-        //		permissions.add(new SimpleGrantedAuthority("PERM_" + nomeTela +"_INSERIR") );
-        //	    }
-        //		    
-        //	    
-        //	}
-	return preparaRegras(usuario.getAuthorities());
-    }
-    
-    public Collection<GrantedAuthority> preparaRegras(Collection<GrantedAuthority> grantedAuthorities) {
-	Collection<GrantedAuthority> regras = new ArrayList<>();
-	for (GrantedAuthority grantedAuthority : grantedAuthorities) {
-	    regras.add(new SimpleGrantedAuthority(Constants.ROLE_PREFFIX
-		    .concat(grantedAuthority.getAuthority().replaceAll(Constants.REGEX_ASC, "")
-			    .toUpperCase())));
+	} else {
+		Collection<GrantedAuthority> regras = montaAcoes(usuario);
+		regras.addAll(preparaRegrasGerais(usuario));
+
+		Authentication authentication = 
+			new Usuario(auth.getPrincipal(), auth.getCredentials(), regras, 
+				usuario.getNome(), usuario.getLogin(), 
+				usuario.getSenha(), usuario.getSenhaConfirmacao(), usuario.getDepartamento());
+		return authentication;
 	}
-	return regras;
     }
 
     /**
@@ -98,9 +85,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
      * @param auth Autenticação
      * @throws Exception
      */
-    private void validatePassword(Authentication auth) throws Exception {
+    private void validatePassword(Authentication auth, Usuario usuario) throws Exception {
 	try {
-	    if (!Criptografia.encrypt((String) auth.getCredentials()).equals(usuario.getPassword())) {
+	    if (!Criptografia.encrypt((String) auth.getCredentials()).equals(usuario.getSenha())) {
 		throw new BadCredentialsException("Erro ao realizar a validação da senha.");
 	    } 	
 	} catch (BadCredentialsException e) {
@@ -116,4 +103,43 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> arg0) {
 	return true;
     }
+    
+    private Collection<GrantedAuthority> montaAcoes(Usuario usuario) {
+	
+	Collection<GrantedAuthority> acoes = new ArrayList<>();
+	List<PermissaoTelaDepartamento> permissoes = 
+		servicoPermissaoTelaDepartamento.buscaPermissoes(usuario.getDepartamento());
+
+	for (PermissaoTelaDepartamento permissaoTelaDepartamento : permissoes) {
+	    if (permissaoTelaDepartamento.isPermiteIncluir()) {
+		adicionaAcao(acoes, permissaoTelaDepartamento, "_INCLUIR");
+	    }
+	    if (permissaoTelaDepartamento.isPermiteVisualizar()) {
+		adicionaAcao(acoes, permissaoTelaDepartamento, "_VISUALIZAR");
+	    }
+	    if (permissaoTelaDepartamento.isPermiteEditar()) {
+		adicionaAcao(acoes, permissaoTelaDepartamento, "_EDITAR");
+	    }
+	    if (permissaoTelaDepartamento.isPermiteExcluir()) {
+		adicionaAcao(acoes, permissaoTelaDepartamento, "_EXCLUIR");
+	    }
+	}
+	return acoes;
+    }
+    
+    public void adicionaAcao(Collection<GrantedAuthority> acoes, 
+	    PermissaoTelaDepartamento permissaoTelaDepartamento,
+	    String acao) {
+	acoes.add(new SimpleGrantedAuthority("ROLE_".concat(permissaoTelaDepartamento.getTela()
+		.getCodigo()).concat(acao)));
+    }
+
+    public Collection<GrantedAuthority> preparaRegrasGerais(Usuario usuario) {
+	Collection<GrantedAuthority> regras = new ArrayList<>();
+	regras.add(new SimpleGrantedAuthority(Constants.ROLE_PREFFIX
+		.concat(usuario.getDepartamento().getAuthority()
+			.replaceAll(Constants.REGEX_ASC, "").toUpperCase())));
+	return regras;
+    }
+
 }

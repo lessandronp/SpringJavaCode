@@ -49,7 +49,8 @@
 					<h:panelGrid columns="2" cellpadding="10" cellspacing="10">
 						<h:outputText value="#{msgs['label.nome']}" />
 						<p:inputText value="#{gerenciaDepartamentoBean.departamento.nome}" 
-							readonly="#{gerenciaDepartamentoBean.somenteLeitura}" />
+							readonly="#{gerenciaDepartamentoBean.somenteLeitura}" 
+							size="50" maxlength="50" />
 
 					</h:panelGrid>
 

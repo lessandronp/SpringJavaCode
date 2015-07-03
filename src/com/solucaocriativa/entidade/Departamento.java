@@ -25,7 +25,7 @@ public class Departamento implements Serializable, GrantedAuthority {
     @Column(name = "id_departamento", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "nome", nullable = false, length = 20)
+    @Column(name = "nome", nullable = false, length = 50)
     private String nome;
 
     public String getNome() {

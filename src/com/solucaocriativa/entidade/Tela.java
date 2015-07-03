@@ -22,11 +22,11 @@ public class Tela implements Serializable {
     @Column(name = "id_tela", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "nome", nullable = false, length = 30)
+    @Column(name = "nome", nullable = false, length = 50)
     private String nome;
 
-    @Column(name = "url", nullable = false, length = 255)
-    private String url;
+    @Column(name = "codigo", nullable = false, length = 30)
+    private String codigo;
 
     public String getNome() {
 	return nome;
@@ -36,15 +36,46 @@ public class Tela implements Serializable {
 	this.nome = nome;
     }
 
-    public String getUrl() {
-	return url;
-    }
-
-    public void setUrl(String url) {
-	this.url = url;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+	result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Tela other = (Tela) obj;
+	if (nome == null) {
+	    if (other.nome != null)
+		return false;
+	} else if (!nome.equals(other.nome))
+	    return false;
+	if (codigo == null) {
+	    if (other.codigo != null)
+		return false;
+	} else if (!codigo.equals(other.codigo))
+	    return false;
+	return true;
     }
 }

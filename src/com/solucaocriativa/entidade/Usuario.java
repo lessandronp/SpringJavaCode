@@ -1,8 +1,6 @@
 package com.solucaocriativa.entidade;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,13 +14,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "Usuario")
 @Table(name = "usuario")
-public class Usuario implements Cloneable, UserDetails {
+public class Usuario extends UsernamePasswordAuthenticationToken implements Cloneable { 
 
     private static final long serialVersionUID = 1L;
 
@@ -49,53 +46,23 @@ public class Usuario implements Cloneable, UserDetails {
     	nullable = false)
     private Departamento departamento;
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-	return super.clone();
+
+    public Usuario() {
+	super(null, null, null);
     }
 
-    @Override
-    public String getUsername() {
-	return login;
+    public Usuario(Object principal, Object credentials, 
+	    Collection<? extends GrantedAuthority> authorities, String nome,
+	    String login, String senha, String senhaConfirmacao,
+	    Departamento departamento) {
+	super(principal, credentials, authorities);
+	this.nome = nome;
+	this.login = login;
+	this.senha = senha;
+	this.senhaConfirmacao = senhaConfirmacao;
+	this.departamento = departamento;
     }
-
-    @Override
-    public String getPassword() {
-	return senha;
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonExpired() {
-	return Boolean.TRUE;
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonLocked() {
-	return Boolean.TRUE;
-    }
-
-    @Transient
-    @Override
-    public boolean isCredentialsNonExpired() {
-	return Boolean.TRUE;
-    }
-
-    @Transient
-    @Override
-    public boolean isEnabled() {
-	return Boolean.TRUE;
-    }
-
-    @Transient
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-	List<GrantedAuthority> permissions = new ArrayList<GrantedAuthority>();
-	permissions.add(new SimpleGrantedAuthority(departamento.getAuthority()));
-	return permissions;
-    }
-
+    
     public String getNome() {
         return nome;
     }
@@ -139,4 +106,10 @@ public class Usuario implements Cloneable, UserDetails {
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+	return super.clone();
+    }
+
 }
